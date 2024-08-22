@@ -1,4 +1,4 @@
-# json_key_functions
+# JSON Key Hyphen to Underscore Converter
 
 ## Description
 
