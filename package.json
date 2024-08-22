@@ -1,0 +1,30 @@
+{
+  "name": "json_key_functions",
+  "version": "1.0.0",
+  "description": "A Node.js script to replace hyphens with underscores in the keys of a JSON object.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samusr/json_key_functions.git"
+  },
+  "keywords": [
+    "json",
+    "converter",
+    "hyphen",
+    "underscore",
+    "keys"
+  ],
+  "author": "Samuel Landaverde",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samusr/json_key_functions/issues"
+  },
+  "homepage": "https://github.com/samusr/json_key_functions#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

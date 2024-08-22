@@ -1,15 +1,15 @@
-# JSON Key Hyphen to Underscore Converter
+# json_key_functions
 
 ## Description
 
-This Node.js script reads a JSON file, replaces all hyphens (`-`) with underscores (`_`) in the keys of the JSON object, and saves the result to a new file. The script is useful for adapting JSON key names to conform to certain naming conventions in projects.
+This Node.js script reads JSON files, replaces all hyphens (`-`) with underscores (`_`) in the keys of the JSON objects, and saves the converted JSON files into a separate directory. The script processes deeply nested objects and arrays. This project is useful for adapting JSON key names to conform to certain naming conventions in projects.
 
 ## Features
 
-- Replaces hyphens (`-`) with underscores (`_`) in the keys of JSON objects.
+- Replaces hyphens (`-`) with underscores (`_`) in JSON keys.
 - Processes deeply nested JSON objects and arrays.
-- Saves the modified JSON to a new file.
-- Handles errors in reading, writing, and parsing JSON.
+- Reads multiple JSON files from a directory and outputs the converted files to another directory.
+- Handles errors in reading, writing, and parsing JSON files.
 
 ## Requirements
 
@@ -18,12 +18,19 @@ This Node.js script reads a JSON file, replaces all hyphens (`-`) with underscor
 
 ## Installation
 
-1. Clone the repository or download the code.
+1. Clone the repository:
+
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/samusr/json_key_functions.git
    ```
 
-2. Install any necessary dependencies (none in this case, as `fs` is built into Node.js).
+2. Navigate to the project directory:
+
+   ```bash
+   cd json_key_functions
+   ```
+
+3. Install any necessary dependencies:
 
    ```bash
    npm install
@@ -31,36 +38,60 @@ This Node.js script reads a JSON file, replaces all hyphens (`-`) with underscor
 
 ## Usage
 
-1. Place your JSON file in the project root and ensure it is named `data.json`.
+1. Place your JSON files in the `json_files` directory.
 
-2. Run the script to process the JSON file and replace hyphens in the keys.
+2. Run the script to process the JSON files and replace hyphens in the keys:
 
    ```bash
-   node <script-filename.js>
+   npm start
    ```
 
-3. The modified JSON file will be saved as `data_cleaned.json` in the project root.
+3. The converted JSON files will be saved to the `json_files_converted` directory.
 
 ### Example
 
-Given a `data.json` file with the following content:
+Given a `data.json` file in the `json_files` directory with the following content:
 
 ```json
 {
   "items": [
-    { "message-id": 123, "profile": { "user-id": 456 } },
-    { "message-id": 789, "profile": { "user-id": 101 } }
+    {
+      "message-id": 123,
+      "profile": {
+        "first-name": "John",
+        "last-name": "Doe"
+      }
+    },
+    {
+      "message_id": 123,
+      "profile": {
+        "first_name": "John",
+        "last_name": "Doe"
+      }
+    }
   ]
 }
 ```
 
-The resulting `data_cleaned.json` will look like this:
+The resulting `data.json` file in the `json_files_converted` directory will look like this:
 
 ```json
 {
   "items": [
-    { "message_id": 123, "profile": { "user_id": 456 } },
-    { "message_id": 789, "profile": { "user_id": 101 } }
+    {
+      "message_id": 123,
+      "profile": {
+        "first_name": "John",
+        "last_name": "Doe"
+      }
+    },
+    {
+      "message_id": 123,
+      "profile": {
+        "first_name": "John",
+        "last_name": "Doe"
+      }
+    }
   ]
 }
 ```
@@ -70,30 +101,92 @@ The resulting `data_cleaned.json` will look like this:
 ```
 project-root/
 │
-├── data.json                 # Original JSON file
-├── data_cleaned.json          # Processed JSON file
-├── <script-filename.js>       # Node.js script
-└── README.md                  # This README file
+├── json_files/                    # Input folder with JSON files
+│   ├── file1.json
+│   ├── file2.json
+│   └── ...
+├── json_files_converted/           # Output folder for converted files
+├── jsonKeyConverter.js             # Class to handle JSON key conversion
+├── index.js                        # Main entry point to read, convert, and save files
+├── __tests__/                      # Folder for Jest tests
+│   └── jsonKeyConverter.test.js    # Jest test for JsonKeyConverter
+├── package.json                    # NPM package metadata and scripts
+└── README.md                       # This README file
 ```
+
+## Scripts
+
+- **start**: Runs the script to process JSON files (`npm start`).
+- **test**: Runs the Jest test suite to ensure the converter works correctly (`npm test`).
+
+## Testing
+
+This project uses Jest for testing. To verify the JSON converter works correctly, run:
+
+```bash
+npm test
+```
+
+### Example Test
+
+The test checks that the JSON converter correctly replaces hyphens with underscores in the keys of an input JSON object.
+
+#### Sample Input for the Test:
+
+```json
+{
+  "items": [
+    {
+      "message-id": 123,
+      "profile": {
+        "first-name": "John",
+        "last-name": "Doe"
+      }
+    },
+    {
+      "message_id": 123,
+      "profile": {
+        "first_name": "John",
+        "last_name": "Doe"
+      }
+    }
+  ]
+}
+```
+
+#### Expected Output for the Test:
+
+```json
+{
+  "items": [
+    {
+      "message_id": 123,
+      "profile": {
+        "first_name": "John",
+        "last_name": "Doe"
+      }
+    },
+    {
+      "message_id": 123,
+      "profile": {
+        "first_name": "John",
+        "last_name": "Doe"
+      }
+    }
+  ]
+}
+```
+
+If the test passes, the converter is functioning as expected.
 
 ## Customization
 
-If you want to change the input or output file names, modify the following lines in the script:
+If you want to change the input or output directories, you can modify the following lines in `index.js`:
 
 ```javascript
-let file_path = 'data.json'; // Change this to your input file name
-fs.writeFile("data_cleaned.json", ...); // Change this to your output file name
+const inputDir = path.join(__dirname, 'json_files');  // Change this to your input directory
+const outputDir = path.join(__dirname, 'json_files_converted');  // Change this to your output directory
 ```
-
-## Common Issues
-
-### File Read/Write Errors
-
-Ensure that the `data.json` file exists in the project root. Additionally, verify that you have the necessary file permissions to read and write files.
-
-### Parsing Errors
-
-If the `data.json` file is not valid JSON, the script will fail. Make sure the file is properly formatted as JSON.
 
 ## Contributions
 
